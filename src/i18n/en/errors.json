@@ -1,0 +1,10 @@
+{
+    "DATA_NOT_FOUND": "This élement not found.",
+    "login": " Échec de la connexion en raison d'informations d'identification incorrectes.",
+    "isValid":"Votre compte n'a pas encore été activé.",
+    "refresh_token": " Échec du rafraîchissement en raison d'un token de rafraîchissement invalide ou expiré.",
+    "forgot_password": "L'adresse e-mail fournie n'est pas associée à un compte utilisateur.",
+    "reset_password": " Échec de la réinitialisation en raison d'un token de réinitialisation invalide ou expiré.",
+    "verify_reset_token": " Le token de réinitialisation est invalide ou expiré.",
+    "token_expired": "Votre session a expiré. Veuillez vous reconnecter pour continuer."
+}

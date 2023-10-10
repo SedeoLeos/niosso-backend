@@ -1,34 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Headers, HttpStatus, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-
+import {  CredentielDto, RefreshTokenDto } from './dto/create-auth.dto';
+import { I18n, I18nContext } from 'nestjs-i18n';
+import { ValidatorRessource } from 'src/common/validator';
+import { Public } from 'src/common/decorators/public.decorator';
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async login(
+    @Body() input: CredentielDto,
+    @Headers('user-agent') userAgent: string,
+    @I18n() lang: I18nContext,
+  ) {
+    const vlRessource = new ValidatorRessource(lang);
+    const auth = CredentielDto.factory(input);
+    await vlRessource.register(auth);
+    vlRessource.validate();
+    return this.authService.signIn(input, userAgent);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
+  @Post('refresh')
+  async refreshToken(
+    @Body() input: RefreshTokenDto,
+    @Headers('user-agent') userAgent: string,
+    @I18n() lang: I18nContext,
+  ) {
+    const vlRessource = new ValidatorRessource(lang);
+    const refreshDto = RefreshTokenDto.factory(input);
+    await vlRessource.register(refreshDto, 'refresh');
+    vlRessource.validate();
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+    const playload = await this.authService.refresh(
+      refreshDto.token,
+      userAgent,
+    );
+    return playload;
   }
 }

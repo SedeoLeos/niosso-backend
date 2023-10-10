@@ -1,21 +1,32 @@
-
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonDataEntity } from 'src/common/utils';
+import { ImageAnnonce } from 'src/image-annonces/entities/image-annonce.entity';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { Categorie } from 'src/cathegorie/entities/cathegorie.entity';
 
 @Entity('annonce')
-export class Annonce {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Column()  
-    first_name: string;
+export class Annonce extends CommonDataEntity {
+  @Column()
+  describe: string;
+  @Column()
+  title: string;
+  @Column()
+  price: string;
+  @Column()
+  device: string;
 
-    @Column()  
-    last_name: string;
+  @OneToMany(() => ImageAnnonce, (images) => images.annonce)
+  images: ImageAnnonce[];
 
-    @Column()  
-    email: string;
+  @ManyToOne(() => User, (user) => user.annonce)
+  user: User;
 
-    @Column()  
-    phone: string;
-
+  @ManyToOne(() => Categorie, (categorie) => categorie.annonces)
+  categorie: Categorie;
 }

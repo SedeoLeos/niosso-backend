@@ -2,13 +2,18 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AnnoncesService } from './annonces.service';
 import { CreateAnnonceDto } from './dto/create-annonce.dto';
 import { UpdateAnnonceDto } from './dto/update-annonce.dto';
+import { I18n, I18nContext } from 'nestjs-i18n';
+import { ValidatorRessource } from 'src/common/validator';
 
 @Controller('annonces')
 export class AnnoncesController {
   constructor(private readonly annoncesService: AnnoncesService) {}
 
   @Post()
-  create(@Body() createAnnonceDto: CreateAnnonceDto) {
+  async create(@Body() createAnnonceDto: CreateAnnonceDto,@I18n() lang: I18nContext) {
+    const validationRessource = new ValidatorRessource(lang);
+    await validationRessource.register(CreateAnnonceDto.fatory(createAnnonceDto),'annonce')
+    validationRessource.validate()
     return this.annoncesService.create(createAnnonceDto);
   }
 
