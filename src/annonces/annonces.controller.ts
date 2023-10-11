@@ -4,17 +4,21 @@ import { CreateAnnonceDto } from './dto/create-annonce.dto';
 import { UpdateAnnonceDto } from './dto/update-annonce.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { ValidatorRessource } from 'src/common/validator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorators';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('annonces')
 export class AnnoncesController {
   constructor(private readonly annoncesService: AnnoncesService) {}
 
   @Post()
-  async create(@Body() createAnnonceDto: CreateAnnonceDto,@I18n() lang: I18nContext) {
+  async create(@Body() createAnnonceDto: CreateAnnonceDto, @I18n() lang: I18nContext, @CurrentUser() user:User) {
     const validationRessource = new ValidatorRessource(lang);
-    await validationRessource.register(CreateAnnonceDto.fatory(createAnnonceDto),'annonce')
+    const annonce = CreateAnnonceDto.fatory(createAnnonceDto)
+    annonce.userId = user.id;
+    await validationRessource.register(annonce,'annonce')
     validationRessource.validate()
-    return this.annoncesService.create(createAnnonceDto);
+    return this.annoncesService.create(annonce);
   }
 
   @Get()

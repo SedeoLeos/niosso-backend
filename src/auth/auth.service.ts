@@ -10,6 +10,7 @@ import { I18nTranslations } from 'src/generated/i18n.generated';
 import { User } from 'src/user/entities/user.entity';
 import { RefreshService } from 'src/refresh/refresh.service';
 import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,9 @@ export class AuthService {
     private refreshService: RefreshService,
   ) { }
 
+  async register(userDto:CreateUserDto){
+    return this.userService.create(userDto)
+  }
   async validateAuthentification(
     inputAuth: CredentielDto,
   ): Promise<User | null> {

@@ -17,7 +17,7 @@ export class Annonce extends CommonDataEntity {
   @Column()
   title: string;
   @Column()
-  price: string;
+  price: number;
   @Column()
   device: string;
 

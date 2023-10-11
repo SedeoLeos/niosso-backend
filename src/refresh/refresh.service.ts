@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { verify } from 'jsonwebtoken';
-// import { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { Refresh } from './entities/refresh.entity';
 import { User } from 'src/user/entities/user.entity';
 
@@ -11,7 +11,7 @@ export class RefreshService {
   constructor(
     @InjectRepository(Refresh)
     private refreshRepository: Repository<Refresh>,
-    // private jwtService: JwtService,
+    private jwtService: JwtService,
   ) {}
   async create(
     user: User,
@@ -36,11 +36,10 @@ export class RefreshService {
       AccessDuretion: '10h',
       RefreshDuretion: '30J',
       refreshToken: refreshToken.sign,
-      accessToken:""
-      //  this.jwtService.sign({
-      //   userId: user.id,
-      //   userInfo: user.profile,
-      // }),
+      accessToken: this.jwtService.sign({
+        userId: user.id,
+        userInfo: user.profile,
+      }),
     };
   }
 

@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnnonceDto } from './dto/create-annonce.dto';
 import { UpdateAnnonceDto } from './dto/update-annonce.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Annonce } from './entities/annonce.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AnnoncesService {
-  create(createAnnonceDto: CreateAnnonceDto) {
-    return 'This action adds a new annonce';
+  constructor(
+  @InjectRepository(Annonce)
+  private annonceRepository : Repository<Annonce>){}
+  async create(createAnnonceDto: CreateAnnonceDto) {
+    const annonce = this.annonceRepository.create({...createAnnonceDto,categorie:{id:createAnnonceDto.categorieId},user:{id:createAnnonceDto.userId}})
+    return await this.annonceRepository.save(annonce);
   }
 
   findAll() {

@@ -1,6 +1,4 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { config } from 'dotenv';
-// npm install sqlite3 --save
 // config({ path: `.env.${process.env.APP_ENV}` });
 // console.log(process.env.DATABASE_NAME);
 export const dataSourceOptions: DataSourceOptions = {

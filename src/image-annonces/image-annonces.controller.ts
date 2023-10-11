@@ -4,13 +4,15 @@ import { CreateImageAnnonceDto } from './dto/create-image-annonce.dto';
 import { UpdateImageAnnonceDto } from './dto/update-image-annonce.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { ValidatorRessource } from 'src/common/validator';
+import { User } from 'src/user/entities/user.entity';
+import { CurrentUser } from 'src/common/decorators/current-user.decorators';
 
 @Controller('image-annonces')
 export class ImageAnnoncesController {
   constructor(private readonly imageAnnoncesService: ImageAnnoncesService) {}
 
   @Post()
-  create(@Body() createImageAnnonceDto: CreateImageAnnonceDto,@I18n() lang:I18nContext) {
+  create(@Body() createImageAnnonceDto: CreateImageAnnonceDto,@I18n() lang:I18nContext,@CurrentUser() user:User) {
     const vlRessource = new ValidatorRessource(lang);
     return this.imageAnnoncesService.create(createImageAnnonceDto);
   }

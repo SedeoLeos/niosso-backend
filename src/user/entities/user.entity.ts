@@ -36,8 +36,8 @@ export class User extends CommonDataEntity {
     @Column({ default: false, type: 'boolean' })
     active: boolean;
 
-    @Column({ type: 'enum', enum: SystemRole, default: SystemRole.USER })
-    role: SystemRole;
+    // @Column({ type: 'enum', enum: SystemRole, default: SystemRole.USER })
+    // role: SystemRole;
 
     @OneToMany(() => Refresh, (refresh) => refresh.user)
     refreshToken: Refresh[];

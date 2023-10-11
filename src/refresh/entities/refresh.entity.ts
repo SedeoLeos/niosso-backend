@@ -18,9 +18,10 @@ export class Refresh  extends CommonDataEntity {
 
   public get sign(): string {
     if (this.reseted) {
-      return sign({ id: this.id, userAgent: this.userAgent, reseted: this.reseted }, process.env.RESET_SECRET, { expiresIn: '2h' });
+      return sign({ id: this.id, userAgent: this.userAgent, reseted: this.reseted }, process.env.RESET_SECRET, { expiresIn: process.env.REFRESH_DURETION  });
     }
-    return sign({ id: this.id, userAgent: this.userAgent, reseted: this.reseted }, process.env.REFRESH_SECRET, { expiresIn: '30d' });
+    console.log(process.env.REFRESH_SECRET)
+    return sign({ id: this.id, userAgent: this.userAgent, reseted: this.reseted }, process.env.REFRESH_SECRET, { expiresIn: process.env.REFRESH_DURETION });
   }
 
 }

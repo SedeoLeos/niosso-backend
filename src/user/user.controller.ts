@@ -12,14 +12,18 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginRequest } from 'src/common/utils';
+import { ValidatorRessource } from 'src/common/validator';
+import { I18n, I18nContext } from 'nestjs-i18n';
+import { CurrentUser } from 'src/common/decorators/current-user.decorators';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+  @Get('me')
+  async create(@CurrentUser() user:User) {
+    return user;
   }
 
   @Get()
