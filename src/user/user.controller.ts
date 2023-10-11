@@ -30,11 +30,6 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-  @Get('profile')
-  profile(@Request() req: LoginRequest) {
-    const { user } = req;
-    return user.profile;
-  }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {

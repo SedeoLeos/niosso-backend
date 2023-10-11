@@ -12,19 +12,20 @@ export class AuthMiddleware implements NestMiddleware {
     private jwtService: JwtService,
     private userService: UserService,
     private i18n: I18nService<I18nTranslations>,
-    private readonly reflector: Reflector,
    ) {}
   
   async use(req: any, res: any, next: () => void) {
-    
     const token = this.extractTokenFromHeader(req);
     if (!token) {
       throw new UnauthorizedException({
         errors: [this.i18n.translate('errors.token_expired')],
       });
     }
+    console.log('-----------------')
     try {
+      console.log('--------try ---------')
       const payload = await this.jwtService.verifyAsync(token);
+      console.log('--------await ----')
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       const _user = await this.userService.findOne( payload.userId );
@@ -35,18 +36,16 @@ export class AuthMiddleware implements NestMiddleware {
         next()
       }
       if (!_user) {
-        console.log(' 6666666666666666666666')
         throw new UnauthorizedException({
           errors: [this.i18n.translate('errors.token_expired')],
         });
       }
     } catch {
-      console.log("++++++++++++++++++")
+      console.log('++++++++++++++++')
       throw new UnauthorizedException({
         errors: [this.i18n.translate('errors.token_expired')],
       });
     }
-    next();
   }
   private extractTokenFromHeader(request: Request): string | undefined {
     const headers = request.headers as any;
